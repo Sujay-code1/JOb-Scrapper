@@ -13,6 +13,56 @@ export default function DashboardPage() {
   const { token } = useAppSelector((state) => state.auth)
   const { history } = useAppSelector((state) => state.applications)
 
+  // Demo job data for display
+  const demoJobs = [
+    {
+      id: 1,
+      jobTitle: 'Senior React Developer',
+      companyName: 'Tech Startup Inc',
+      location: 'Remote',
+      skills: ['React', 'TypeScript', 'Node.js', 'MongoDB'],
+      salary: '$120k - $150k',
+      platform: 'LinkedIn',
+      jobLink: 'https://linkedin.com/jobs/1',
+      description: 'We are looking for an experienced React developer to join our growing team.',
+    },
+    {
+      id: 2,
+      jobTitle: 'Full Stack Developer',
+      companyName: 'Cloud Solutions Ltd',
+      location: 'San Francisco, CA',
+      skills: ['React', 'Python', 'AWS', 'PostgreSQL'],
+      salary: '$130k - $170k',
+      platform: 'Indeed',
+      jobLink: 'https://indeed.com/jobs/2',
+      description: 'Join our team to build scalable web applications and cloud infrastructure.',
+    },
+    {
+      id: 3,
+      jobTitle: 'Frontend Engineer',
+      companyName: 'Digital Agency Pro',
+      location: 'New York, NY',
+      skills: ['Vue.js', 'Tailwind CSS', 'JavaScript', 'Git'],
+      salary: '$100k - $130k',
+      platform: 'Glassdoor',
+      jobLink: 'https://glassdoor.com/jobs/3',
+      description: 'Help us create beautiful and responsive user interfaces for our clients.',
+    },
+    {
+      id: 4,
+      jobTitle: 'Backend Developer',
+      companyName: 'Enterprise Systems Co',
+      location: 'Chicago, IL',
+      skills: ['Node.js', 'Express', 'PostgreSQL', 'Docker'],
+      salary: '$110k - $145k',
+      platform: 'Monster',
+      jobLink: 'https://monster.com/jobs/4',
+      description: 'Build robust backend systems and APIs for our enterprise clients.',
+    },
+  ]
+
+  const displayJobs = results.length > 0 ? results : demoJobs
+
   useEffect(() => {
     const loadHistory = async () => {
       dispatch(setApplicationLoading())
@@ -87,48 +137,62 @@ export default function DashboardPage() {
         </section>
 
         <section className="rounded-3xl bg-white p-6 shadow-md">
-          <h2 className="text-xl font-semibold">Job Results</h2>
-          {results.length === 0 ? (
-            <div className="mt-4 text-slate-600">Search jobs to see listings here.</div>
-          ) : (
-            <div className="mt-4 overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-200 text-sm">
-                <thead className="bg-slate-50 text-left text-slate-700">
-                  <tr>
-                    <th className="px-4 py-3">Title</th>
-                    <th className="px-4 py-3">Company</th>
-                    <th className="px-4 py-3">Location</th>
-                    <th className="px-4 py-3">Platform</th>
-                    <th className="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {results.map((job, idx) => (
-                    <tr key={`${job.jobLink}-${idx}`}>
-                      <td className="px-4 py-3">{job.jobTitle}</td>
-                      <td className="px-4 py-3">{job.companyName}</td>
-                      <td className="px-4 py-3">{job.location}</td>
-                      <td className="px-4 py-3">{job.platform}</td>
-                      <td className="px-4 py-3 space-x-2">
-                        <button
-                          onClick={() => window.open(job.jobLink, '_blank')}
-                          className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-700 hover:bg-slate-200"
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() => handleApply(job)}
-                          className="rounded-md bg-indigo-600 px-3 py-2 text-sm text-white hover:bg-indigo-700"
-                        >
-                          Apply
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <h2 className="text-xl font-semibold mb-6">Job Listings</h2>
+          {status === 'loading' && <div className="text-center py-8 text-slate-600">Searching jobs...</div>}
+          {error && <div className="text-center py-8 text-red-600">{error}</div>}
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            {displayJobs.map((job) => (
+              <div key={job.id || job.jobLink} className="border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-slate-900">{job.jobTitle}</h3>
+                    <p className="text-sm text-slate-600 mt-1">{job.companyName}</p>
+                  </div>
+                  <span className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">{job.platform || 'Job Board'}</span>
+                </div>
+
+                <div className="mb-4 space-y-2">
+                  <p className="text-sm text-slate-700">
+                    <span className="font-medium">Location:</span> {job.location}
+                  </p>
+                  {job.salary && (
+                    <p className="text-sm text-slate-700">
+                      <span className="font-medium">Salary:</span> {job.salary}
+                    </p>
+                  )}
+                  {job.description && (
+                    <p className="text-sm text-slate-600 mt-3 line-clamp-2">{job.description}</p>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <p className="text-xs font-medium text-slate-700 mb-2">Required Skills:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {(job.skills || []).map((skill, idx) => (
+                      <span key={idx} className="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-4 border-t border-slate-200">
+                  <button
+                    onClick={() => window.open(job.jobLink || '#', '_blank')}
+                    className="flex-1 rounded-lg bg-slate-100 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200 transition-colors"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleApply(job)}
+                    className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 transition-colors"
+                  >
+                    Apply Now
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="rounded-3xl bg-white p-6 shadow-md">
