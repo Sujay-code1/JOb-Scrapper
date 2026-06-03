@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_BASE =  'https://job-scrapper-kfq0.onrender.com/api'
 
 const apiClient = axios.create({
   baseURL: API_BASE,
@@ -21,7 +21,7 @@ const request = async (path, method = 'GET', data, token) => {
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
-      
+
     }
 
     const response = await apiClient(config)
