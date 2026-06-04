@@ -13,55 +13,7 @@ export default function DashboardPage() {
   const { token } = useAppSelector((state) => state.auth)
   const { history } = useAppSelector((state) => state.applications)
 
-  // Demo job data for display
-  const demoJobs = [
-    {
-      id: 1,
-      jobTitle: 'Senior React Developer',
-      companyName: 'Tech Startup Inc',
-      location: 'Remote',
-      skills: ['React', 'TypeScript', 'Node.js', 'MongoDB'],
-      salary: '$120k - $150k',
-      platform: 'LinkedIn',
-      jobLink: 'https://linkedin.com/jobs/1',
-      description: 'We are looking for an experienced React developer to join our growing team.',
-    },
-    {
-      id: 2,
-      jobTitle: 'Full Stack Developer',
-      companyName: 'Cloud Solutions Ltd',
-      location: 'San Francisco, CA',
-      skills: ['React', 'Python', 'AWS', 'PostgreSQL'],
-      salary: '$130k - $170k',
-      platform: 'Indeed',
-      jobLink: 'https://indeed.com/jobs/2',
-      description: 'Join our team to build scalable web applications and cloud infrastructure.',
-    },
-    {
-      id: 3,
-      jobTitle: 'Frontend Engineer',
-      companyName: 'Digital Agency Pro',
-      location: 'New York, NY',
-      skills: ['Vue.js', 'Tailwind CSS', 'JavaScript', 'Git'],
-      salary: '$100k - $130k',
-      platform: 'Glassdoor',
-      jobLink: 'https://glassdoor.com/jobs/3',
-      description: 'Help us create beautiful and responsive user interfaces for our clients.',
-    },
-    {
-      id: 4,
-      jobTitle: 'Backend Developer',
-      companyName: 'Enterprise Systems Co',
-      location: 'Chicago, IL',
-      skills: ['Node.js', 'Express', 'PostgreSQL', 'Docker'],
-      salary: '$110k - $145k',
-      platform: 'Monster',
-      jobLink: 'https://monster.com/jobs/4',
-      description: 'Build robust backend systems and APIs for our enterprise clients.',
-    },
-  ]
-
-  const displayJobs = results.length > 0 ? results : demoJobs
+  const displayJobs = results
 
   useEffect(() => {
     const loadHistory = async () => {
@@ -110,7 +62,7 @@ export default function DashboardPage() {
         <Header />
         <div className="mx-auto max-w-6xl space-y-8 pt-4">
         <div className="rounded-3xl bg-white p-6 shadow-md">
-          <p className="text-sm text-slate-500">Welcome to the demo job scraper platform. Use the form below to search jobs and save your applications.</p>
+          <p className="text-sm text-slate-500">Welcome to the job scraper platform. Use the form below to search jobs and save your applications.</p>
         </div>
         <section className="rounded-3xl bg-white p-6 shadow-md">
           <h2 className="text-xl font-semibold">Job Scraper</h2>
