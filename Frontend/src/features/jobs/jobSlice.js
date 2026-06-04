@@ -11,13 +11,14 @@ const jobSlice = createSlice({
   initialState,
   reducers: {
     setResults(state, action) {
-      state.results = action.payload
+      state.results = Array.isArray(action.payload) ? action.payload : []
       state.status = 'succeeded'
       state.error = null
     },
     clearResults(state) {
       state.results = []
       state.status = 'idle'
+      state.error = null
     },
     setJobLoading(state) {
       state.status = 'loading'

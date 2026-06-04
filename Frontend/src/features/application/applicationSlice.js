@@ -11,11 +11,12 @@ const applicationSlice = createSlice({
   initialState,
   reducers: {
     setApplicationHistory(state, action) {
-      state.history = action.payload
+      state.history = Array.isArray(action.payload) ? action.payload : []
       state.status = 'succeeded'
       state.error = null
     },
     addApplication(state, action) {
+      if (!Array.isArray(state.history)) state.history = []
       state.history.unshift(action.payload)
     },
     setApplicationLoading(state) {

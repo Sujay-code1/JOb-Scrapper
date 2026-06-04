@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../hooks/useAppHooks.js'
 import { setProfile, setProfileError, setProfileLoading, clearProfile } from '../features/profile/profileSlice.js'
 import { profileApi } from '../services/api.js'
@@ -41,6 +42,9 @@ export default function ProfilePage() {
     try {
       const response = await profileApi.updateProfile({ name, location, profileImage: imageUrl }, token)
       dispatch(setProfile(response.profile))
+      setName('')
+      setLocation('')
+      setImageUrl('')
       setMessage('Profile updated successfully')
     } catch (err) {
       setMessage(err.message)
@@ -61,6 +65,16 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8">
       <div className="mx-auto max-w-3xl space-y-8">
+        <div>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition hover:bg-slate-50"
+          >
+            <span className="text-lg">←</span>
+            Back to dashboard
+          </Link>
+        </div>
+
         <section className="rounded-3xl bg-white p-6 shadow-md">
           <h2 className="text-xl font-semibold">Profile</h2>
           <form onSubmit={handleSave} className="mt-6 space-y-4">
