@@ -16,9 +16,21 @@ const apiClient = axios.create({
   },
 })
 
+const getStoredToken = () => {
+  try {
+    const serialized = localStorage.getItem('job-scraper-auth')
+    if (!serialized) return null
+    const savedState = JSON.parse(serialized)
+    return savedState?.token || null
+  } catch {
+    return null
+  }
+}
+
 const request = async (path, method = 'GET', data, token) => {
   const endpoint = path.startsWith('/') ? path : `/${path}`
   const url = `${API_BASE}${endpoint}`
+  const authToken = token || getStoredToken()
 
   try {
     const config = {
@@ -28,8 +40,8 @@ const request = async (path, method = 'GET', data, token) => {
       headers: {},
     }
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`
     }
 
     const response = await apiClient(config)

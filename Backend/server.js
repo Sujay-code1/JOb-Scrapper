@@ -19,7 +19,6 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5174',
   process.env.CLIENT_URL,
-  'https://j-ob-scrapper.vercel.app',
 ].filter(Boolean)
 
 const corsOptions = {
