@@ -25,17 +25,17 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 w-full bg-slate-900/95 shadow-sm backdrop-blur-sm dark:bg-slate-950/95">
+    <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/95">
       <div className="mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Link to="/dashboard" className="text-2xl font-bold tracking-tight text-white">
+          <Link to="/dashboard" className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             JobScraper
           </Link>
 
-          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-200">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
             {firstName && (
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-white">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-sm font-semibold uppercase">
+              <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold uppercase text-slate-800 dark:bg-slate-700 dark:text-slate-100">
                   {firstName.charAt(0) || 'U'}
                 </span>
                 <span>{firstName}</span>
@@ -43,33 +43,33 @@ export default function Header() {
             )}
             <Link
               to="/dashboard"
-              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 transition hover:bg-white/20"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-900 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Dashboard
             </Link>
             <Link
               to="/profile"
-              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 transition hover:bg-white/20"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-900 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Profile
             </Link>
             <button
               type="button"
               onClick={() => dispatch(toggleTheme())}
-              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               {mode === 'dark' ? '☀️ Light' : '🌙 Dark'}
             </button>
             <button
               onClick={handleLogout}
-              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
             >
               Logout
             </button>
           </div>
         </div>
 
-        <p className="max-w-2xl text-sm text-slate-300">
+        <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-300">
           Manage applications, save jobs, and review your profile in one place.
         </p>
       </div>
