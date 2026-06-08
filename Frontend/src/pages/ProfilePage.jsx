@@ -7,7 +7,7 @@ import { profileApi } from '../services/api.js'
 export default function ProfilePage() {
   const dispatch = useAppDispatch()
   const { token } = useAppSelector((state) => state.auth)
-  const { profile, status, error } = useAppSelector((state) => state.profile)
+  const { profile, error } = useAppSelector((state) => state.profile)
   const [name, setName] = useState('')
   const [location, setLocation] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -27,14 +27,6 @@ export default function ProfilePage() {
     if (token) loadProfile()
     return () => dispatch(clearProfile())
   }, [dispatch, token])
-
-  useEffect(() => {
-    if (profile) {
-      setName(profile.name || '')
-      setLocation(profile.location || '')
-      setImageUrl(profile.profileImage || '')
-    }
-  }, [profile])
 
   const handleSave = async (e) => {
     e.preventDefault()
@@ -63,7 +55,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
+    <div className="min-h-screen bg-slate-50 px-4 pb-8 pt-28 dark:bg-slate-950">
       <div className="mx-auto max-w-3xl space-y-8">
         <div>
           <Link
@@ -75,13 +67,13 @@ export default function ProfilePage() {
           </Link>
         </div>
 
-        <section className="rounded-3xl bg-white p-6 shadow-md">
+        <section className="rounded-3xl bg-white p-6 shadow-md dark:bg-slate-900 dark:text-slate-100">
           <h2 className="text-xl font-semibold">Profile</h2>
           <form onSubmit={handleSave} className="mt-6 space-y-4">
             <div>
               <label className="block text-sm text-slate-700">Name</label>
               <input
-                value={name}
+                value={name || profile?.name || ''}
                 onChange={(e) => setName(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
               />
@@ -89,7 +81,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm text-slate-700">Location</label>
               <input
-                value={location}
+                value={location || profile?.location || ''}
                 onChange={(e) => setLocation(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
               />
@@ -97,7 +89,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm text-slate-700">Image URL</label>
               <input
-                value={imageUrl}
+                value={imageUrl || profile?.profileImage || ''}
                 onChange={(e) => setImageUrl(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
               />

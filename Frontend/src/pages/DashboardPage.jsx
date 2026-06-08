@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppHooks.js'
 import Header from '../components/layout/Header.jsx'
 import { setResults, setJobError, setJobLoading } from '../features/jobs/jobSlice.js'
 import { addApplication, setApplicationHistory, setApplicationError, setApplicationLoading } from '../features/application/applicationSlice.js'
+import { showToast } from '../features/notifications/notificationSlice.js'
 import { jobApi, applicationApi } from '../services/api.js'
 
 export default function DashboardPage() {
@@ -11,6 +12,7 @@ export default function DashboardPage() {
   const [location, setLocation] = useState('Remote')
   const [jobPage, setJobPage] = useState(1)
   const [historyPage, setHistoryPage] = useState(1)
+  const [appliedJobs, setAppliedJobs] = useState({})
   const { results = [], status, error } = useAppSelector((state) => state.jobs || {})
   const { token } = useAppSelector((state) => state.auth || {})
   const history = useAppSelector((state) => state.applications?.history || [])
@@ -55,6 +57,8 @@ export default function DashboardPage() {
   }
 
   const handleApply = async (job) => {
+    if (appliedJobs[job.jobLink]) return
+
     try {
       const response = await applicationApi.add(
         {
@@ -68,6 +72,8 @@ export default function DashboardPage() {
         token,
       )
       dispatch(addApplication(response.application))
+      setAppliedJobs((prev) => ({ ...prev, [job.jobLink]: true }))
+      dispatch(showToast({ type: 'success', message: 'Application saved successfully' }))
       window.open(job.jobLink, '_blank')
     } catch (err) {
       console.error(err)
@@ -75,7 +81,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
+    <div className="min-h-screen bg-slate-50 px-4 pb-8 pt-28 dark:bg-slate-950">
       <Header />
 
       <div className="mx-auto max-w-7xl space-y-8 pt-6">
@@ -94,10 +100,10 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl bg-white p-6 shadow-md">
+        <section className="rounded-3xl bg-white p-6 shadow-md dark:bg-slate-900 dark:text-slate-100">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-900">Job Scraper</h2>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Job Scraper</h2>
               <p className="mt-1 text-sm text-slate-500">Enter a keyword and location to scrape jobs from supported boards.</p>
             </div>
             <div className="rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">Results: {results.length}</div>
@@ -126,10 +132,10 @@ export default function DashboardPage() {
           {error && <div className="mt-4 rounded-3xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
         </section>
 
-        <section className="rounded-3xl bg-white p-6 shadow-md">
+        <section className="rounded-3xl bg-white p-6 shadow-md dark:bg-slate-900 dark:text-slate-100">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-900">Job Listings</h2>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Job Listings</h2>
               <p className="mt-1 text-sm text-slate-500">Click Apply to open the job link and save it to your application history.</p>
             </div>
             <div className="text-sm text-slate-500">{results.length} jobs found</div>
@@ -174,9 +180,10 @@ export default function DashboardPage() {
                         <td className="px-4 py-4 align-top">
                           <button
                             onClick={() => handleApply(job)}
-                            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                            disabled={Boolean(appliedJobs[job.jobLink])}
+                            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-emerald-600"
                           >
-                            Apply Now
+                            {appliedJobs[job.jobLink] ? 'Applied' : 'Apply Now'}
                           </button>
                         </td>
                       </tr>
@@ -215,10 +222,10 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-white p-6 shadow-md">
+        <section className="rounded-3xl bg-white p-6 shadow-md dark:bg-slate-900 dark:text-slate-100">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-900">Application History</h2>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Application History</h2>
               <p className="mt-1 text-sm text-slate-500">Track jobs you’ve applied to and revisit each opportunity.</p>
             </div>
             <div className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600">{history.length} stored</div>
